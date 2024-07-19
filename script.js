@@ -40,18 +40,40 @@ const questions = [
 var callCount = 0;
 var finalCorrectAnswerCount = 0;
 $(document).ready(() => {
-    const runQuiz = () => {
-        callCount++;
-        if (callCount > 5) {
-            console.log("Quiz Over")
-            console.log("Correct Answer Count : " + finalCorrectAnswerCount);
-            return;
-        } else {
-            let timeoutId = setTimeout(runQuiz, 8000);
-        }
-        quizCardLoader(callCount - 1);
-    };
+    async function fetchQuestions() {
+        try {
+            const response = await fetch('https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple');
+            const data = await response.json();
 
+            // Assuming the API returns an array of questions in 'results'
+            const questions = data.results;
+            /*displayQuestions(questions);*/ // Display the questions
+            console.log(questions);
+        } catch (error) {
+            console.error('Error fetching questions:', error);
+        }
+    }
+
+// Call the function to fetch questions
+    fetchQuestions();
+
+    const runQuiz = () => {
+            let count=5;
+            /*let timeoutId = setTimeout(runQuiz, 8000);*/
+            setInterval(()=>{
+                count--;
+                $('#countdown').text(count);
+                if (count <= 0) {
+                    callCount++;
+                  quizCardLoader(callCount - 1);
+                  count = 5;
+                }else if(count <= -1){
+
+                }
+            },2000);
+
+        /*quizCardLoader(callCount - 1);*/
+    };
     runQuiz();
 });
 
