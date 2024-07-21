@@ -24,20 +24,39 @@ $(document).ready(() => {
             console.log(error)
         }
     }
+
     fetchQuestions();
     console.log(questionArray);
 
     let quizRound=0;
     let interval=setInterval(()=>{
+        startCountdown();
         quizCardLoader(quizRound);
         quizRound++
-        if(quizRound==5){
+        if(quizRound>5){
             quizRound=0
             clearInterval(interval)
             console.log("Your Score is : "+correctAnswersCount)
+            finalScoreLoader();
         }
     },5000)
+
+    let countdownInterval;
+    let startCountdown = () => {
+        let timeLeft = 5;
+        clearInterval(countdownInterval); // Clear any existing countdown intervals
+        countdownInterval = setInterval(() => {
+            timeLeft--;
+            $('#countdown').text(`Time left: ${timeLeft} seconds`);
+            if (timeLeft < 0) {
+                clearInterval(countdownInterval);
+            }
+        }, 1000);
+    };
 })
+
+
+
 
 let quizCardLoader = (number) => {
     $('#question').html("");
@@ -96,3 +115,70 @@ function shuffleArray(array) {
     return array;
 }
 
+let finalScoreLoader =()=>{
+    let finalScoreTemp = `
+        <div class="accordion" id="accordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        1. ${questionArray[0].question}
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+         ${questionArray[0].correctAnswer}
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        2. ${questionArray[1].question}
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        ${questionArray[1].correctAnswer}
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+       3. ${questionArray[2].question}
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        ${questionArray[2].correctAnswer}
+       </div>
+    </div>
+    <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+       4. ${questionArray[3].question}
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        ${questionArray[3].correctAnswer}
+       </div>
+    </div>
+    <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+       5. ${questionArray[4].question}
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        ${questionArray[4].correctAnswer}
+       </div>
+    </div>
+  </div>
+</div>
+    `;
+    $("#question").html("");
+    $('#questionNumber').html("Answers for the previous questions");
+    $("#question").append(finalScoreTemp);
+}
