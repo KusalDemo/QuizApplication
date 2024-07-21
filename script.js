@@ -13,6 +13,7 @@ $(document).ready(() => {
                 let answer03 = fetchedQuestions[i].incorrect_answers[1].toLowerCase();
                 let answer04 = fetchedQuestions[i].incorrect_answers[2].toLowerCase();
                 let answerArray = [answer01, answer02, answer03, answer04];
+                answerArray = shuffleArray(answerArray);
                 questionArray.push({
                     question: fetchedQuestions[i].question,
                     answer: answerArray,
@@ -93,5 +94,12 @@ let checkAnswer=(answer)=>{
     }else{
         console.log("Wrong");
     }
+}
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
 
