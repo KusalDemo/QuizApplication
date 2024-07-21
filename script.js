@@ -1,5 +1,5 @@
 const questionArray=[];
-var callCount = 0;
+var correctAnswersCount = 0;
 $(document).ready(() => {
     async function fetchQuestions() {
         try {
@@ -34,67 +34,60 @@ $(document).ready(() => {
         if(quizRound==5){
             quizRound=0
             clearInterval(interval)
+            console.log("Your Score is : "+correctAnswersCount)
         }
-    },1000)
+    },5000)
 })
 
 let quizCardLoader = (number) => {
     $('#question').html("");
     $("#questionNumber").text(number + 1 + " / 5 Question");
     let question = questionArray[number].question;
+    let correctAnswer = questionArray[number].correctAnswer
+    const escapedCorrectAnswer = correctAnswer.replace(/'/g, "\\'");
+    console.log("Escaped Answer : "+escapedCorrectAnswer)
     let questionTemp = `
             <h4>${number + 1}. ${question}</h4><br>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answer" value=0 id="answer${number + 1}">
+              <input class="form-check-input" type="radio" name="answer" value= ${questionArray[number].answer[0]} id="answer${number + 1}">
               <label class="form-check-label" for="answer${number + 1}">
                 ${questionArray[number].answer[0]}
               </label>
             </div><br>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answer" value=1 id="answer${number + 2}">
+              <input class="form-check-input" type="radio" name="answer" value=${questionArray[number].answer[1]} id="answer${number + 2}">
               <label class="form-check-label" for="answer${number + 2}">
                 ${questionArray[number].answer[1]}
               </label>
             </div><br>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answer" value=2 id="answer${number + 3}">
+              <input class="form-check-input" type="radio" name="answer" value=${questionArray[number].answer[2]} id="answer${number + 3}">
               <label class="form-check-label" for="answer${number + 3}">
                 ${questionArray[number].answer[2]}
               </label>
             </div><br>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answer" value=3 id="answer${number + 4}">
+              <input class="form-check-input" type="radio" name="answer" value=${questionArray[number].answer[3]} id="answer${number + 4}">
               <label class="form-check-label" for="answer${number + 4}">
                 ${questionArray[number].answer[3]}
               </label>
             </div><br>
             <div class="card-footer text-end">
-                 <a class="btn btn-success" id="nextBtn" onclick=checkAnswer(getSelectedAnswer(${number}))>Next</a>
+                 <a class="btn btn-success" id="nextBtn" onclick="getSelectedAnswer(${number},'${escapedCorrectAnswer}')">Next</a>
             </div>
         `;
     $("#question").append(questionTemp);
 }
-let getSelectedAnswer = (currentQuestionNumber) => {
-    console.log("{$number} "+currentQuestionNumber)
+let getSelectedAnswer=(currentQuestionNumber,correctAnswer) => {
     let checkedInput = document.querySelector('input[name="answer"]:checked');
-    if (!checkedInput) {
-        console.error("No answer selected.");
-        return [currentQuestionNumber,null];f
-    }
-    console.log(checkedInput.value)
-    return [currentQuestionNumber,checkedInput.value];
-};
-let checkAnswer=(answer)=>{
-    if(answer[1]===null){
-        return;
-    }
-    if(questions[answer[0]].answer[answer[1]].correct){
-        console.log("Correct");
-        finalCorrectAnswerCount++;
+    if (checkedInput.value==correctAnswer) {
+        correctAnswersCount++;
+        console.log("Question number : "+currentQuestionNumber+", Answer is Correct..")
     }else{
-        console.log("Wrong");
+        console.log("OOps wrong answer..");
     }
-}
+};
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
