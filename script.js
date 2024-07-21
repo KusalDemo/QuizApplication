@@ -1,6 +1,9 @@
 const questionArray=[];
 var correctAnswersCount = 0;
 $(document).ready(() => {
+    let currentUserName = localStorage.getItem('lastUserName');
+    console.log("Current Username : "+currentUserName)
+    $('#playerName').html(currentUserName);
     async function fetchQuestions() {
         try {
             let response = await fetch('https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple');
@@ -30,7 +33,9 @@ $(document).ready(() => {
 
     let quizRound=0;
     let interval=setInterval(()=>{
-        startCountdown();
+        if(!(quizRound>4)){
+            startCountdown();
+        }
         quizCardLoader(quizRound);
         quizRound++
         if(quizRound>5){
@@ -39,23 +44,21 @@ $(document).ready(() => {
             console.log("Your Score is : "+correctAnswersCount)
             finalScoreLoader();
         }
-    },5000)
+    },10000)
 
-    let countdownInterval;
-    let startCountdown = () => {
-        let timeLeft = 5;
-        clearInterval(countdownInterval); // Clear any existing countdown intervals
-        countdownInterval = setInterval(() => {
-            timeLeft--;
-            $('#countdown').text(`Time left: ${timeLeft} seconds`);
-            if (timeLeft < 0) {
-                clearInterval(countdownInterval);
-            }
-        }, 1000);
-    };
 })
-
-
+let countdownInterval;
+let startCountdown = () => {
+    let timeLeft = 10;
+    clearInterval(countdownInterval);
+    countdownInterval = setInterval(() => {
+        timeLeft--;
+        $('#countdown').text(`Time left: ${timeLeft} seconds`);
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+        }
+    }, 1000);
+};
 
 
 let quizCardLoader = (number) => {
@@ -103,7 +106,7 @@ let getSelectedAnswer=(currentQuestionNumber,correctAnswer) => {
         correctAnswersCount++;
         console.log("Question number : "+currentQuestionNumber+", Answer is Correct..")
     }else{
-        console.log("OOps wrong answer..");
+        console.log("Oops wrong answer..");
     }
 };
 
@@ -117,6 +120,7 @@ function shuffleArray(array) {
 
 let finalScoreLoader =()=>{
     let finalScoreTemp = `
+        <h5 style="color: green">Total Score : ${correctAnswersCount}/5 </h5>
         <div class="accordion" id="accordion">
   <div class="accordion-item">
     <h2 class="accordion-header">
@@ -155,22 +159,22 @@ let finalScoreLoader =()=>{
     </div>
     <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
        4. ${questionArray[3].question}
       </button>
     </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
       <div class="accordion-body">
         ${questionArray[3].correctAnswer}
        </div>
     </div>
     <div class="accordion-item">
     <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseThree">
        5. ${questionArray[4].question}
       </button>
     </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
       <div class="accordion-body">
         ${questionArray[4].correctAnswer}
        </div>
