@@ -2,7 +2,6 @@ const questionArray=[];
 var correctAnswersCount = 0;
 $(document).ready(() => {
     let currentUserName = localStorage.getItem('lastUserName');
-    console.log("Current Username : "+currentUserName)
     $('#playerName').html(currentUserName);
     async function fetchQuestions() {
         try {
@@ -67,9 +66,6 @@ let quizCardLoader = (number) => {
     let question = questionArray[number].question;
     let correctAnswer = questionArray[number].correctAnswer
     let escapedCorrectAnswer = correctAnswer.replace(/'/g, ',').replace(/\s/g, '');
-    console.log("Correct Answer : "+correctAnswer)
-    console.log("Escaped Answer : "+escapedCorrectAnswer)
-
     let questionTemp = `
             <h4>${number + 1}. ${question}</h4><br>
             <div class="form-check">
@@ -105,7 +101,6 @@ let quizCardLoader = (number) => {
 let getSelectedAnswer=(currentQuestionNumber,correctAnswer) => {
     let checkedInput = document.querySelector('input[name="answer"]:checked');
     document.querySelector('input[name="answer"]:checked').style.backgroundColor = "yellow";
-    console.log("replacedCheckedInput : ",checkedInput)
     if (checkedInput.value==correctAnswer) {
         correctAnswersCount++;
         console.log("Question number : "+currentQuestionNumber+", Answer is Correct..")
