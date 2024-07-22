@@ -66,42 +66,46 @@ let quizCardLoader = (number) => {
     $("#questionNumber").text(number + 1 + " / 5 Question");
     let question = questionArray[number].question;
     let correctAnswer = questionArray[number].correctAnswer
-    const escapedCorrectAnswer = correctAnswer.replace(/'/g, "\\'");
+    let escapedCorrectAnswer = correctAnswer.replace(/'/g, ',').replace(/\s/g, '');
+    console.log("Correct Answer : "+correctAnswer)
     console.log("Escaped Answer : "+escapedCorrectAnswer)
+
     let questionTemp = `
             <h4>${number + 1}. ${question}</h4><br>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answer" value= ${questionArray[number].answer[0]} id="answer${number + 1}">
-              <label class="form-check-label" for="answer${number + 1}">
+              <input class="form-check-input" type="radio" name="answer" value= ${questionArray[number].answer[0].replace(/'/g, ',').replace(/\s/g, '')} id="answer${number + 1}">
+              <label class="form-check-label text-success" for="answer${number + 1}">
                 ${questionArray[number].answer[0]}
               </label>
             </div><br>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answer" value=${questionArray[number].answer[1]} id="answer${number + 2}">
-              <label class="form-check-label" for="answer${number + 2}">
+              <input class="form-check-input" type="radio" name="answer" value=${questionArray[number].answer[1].replace(/'/g, ',').replace(/\s/g, '')} id="answer${number + 2}">
+              <label class="form-check-label text-success" for="answer${number + 2}">
                 ${questionArray[number].answer[1]}
               </label>
             </div><br>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answer" value=${questionArray[number].answer[2]} id="answer${number + 3}">
-              <label class="form-check-label" for="answer${number + 3}">
+              <input class="form-check-input" type="radio" name="answer" value=${questionArray[number].answer[2].replace(/'/g, ',').replace(/\s/g, '')} id="answer${number + 3}">
+              <label class="form-check-label text-success" for="answer${number + 3}">
                 ${questionArray[number].answer[2]}
               </label>
             </div><br>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answer" value=${questionArray[number].answer[3]} id="answer${number + 4}">
-              <label class="form-check-label" for="answer${number + 4}">
+              <input class="form-check-input" type="radio" name="answer" value=${questionArray[number].answer[3].replace(/'/g, ',').replace(/\s/g, '')} id="answer${number + 4}">
+              <label class="form-check-label text-success" for="answer${number + 4}">
                 ${questionArray[number].answer[3]}
               </label>
             </div><br>
             <div class="card-footer text-end">
-                 <a class="btn btn-success" id="nextBtn" onclick="getSelectedAnswer(${number},'${escapedCorrectAnswer}')">Next</a>
+                 <a class="btn btn-success" id="nextBtn" onclick="getSelectedAnswer(${number},'${escapedCorrectAnswer}')">Confirm</a>
             </div>
         `;
     $("#question").append(questionTemp);
 }
 let getSelectedAnswer=(currentQuestionNumber,correctAnswer) => {
     let checkedInput = document.querySelector('input[name="answer"]:checked');
+    document.querySelector('input[name="answer"]:checked').style.backgroundColor = "yellow";
+    console.log("replacedCheckedInput : ",checkedInput)
     if (checkedInput.value==correctAnswer) {
         correctAnswersCount++;
         console.log("Question number : "+currentQuestionNumber+", Answer is Correct..")
@@ -186,3 +190,4 @@ let finalScoreLoader =()=>{
     $('#questionNumber').html("Answers for the previous questions");
     $("#question").append(finalScoreTemp);
 }
+
